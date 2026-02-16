@@ -1,32 +1,41 @@
 {
-  "name": "mmm-template",
+  "name": "mmm-yandexweather",
   "version": "1.0.0",
-  "description": "[Module description]",
-  "main": "MMM-Template.js",
+  "description": "MagicMirror² module for displaying weather data from Yandex Weather API v3",
+  "main": "MMM-YandexWeather.js",
   "scripts": {
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "test": "node --run lint"
+    "test": "node --run lint",
+    "check": "./check.sh",
+    "audit": "npm audit --audit-level=moderate"
   },
   "repository": {
     "type": "git",
-    "url": "git+[GitHub url].git"
+    "url": "git+https://github.com/isemenov/MMM-YandexWeather.git"
   },
   "keywords": [
-    "template"
+    "MagicMirror",
+    "weather",
+    "yandex",
+    "yandex-weather",
+    "forecast",
+    "module",
+    "smart-mirror"
   ],
-  "author": "[Author]",
+  "author": "isemenov",
   "license": "MIT",
   "bugs": {
-    "url": "[GitHub url]/issues"
+    "url": "https://github.com/isemenov/MMM-YandexWeather/issues"
   },
-  "homepage": "[GitHub url]#readme",
+  "homepage": "https://github.com/isemenov/MMM-YandexWeather#readme",
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
   "devDependencies": {
-    "@eslint/css": "^0.9.0",
-    "@eslint/js": "^9.30.1",
-    "@eslint/markdown": "^6.6.0",
-    "@stylistic/eslint-plugin": "^5.1.0",
-    "eslint": "^9.30.1",
-    "globals": "^16.3.0"
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.8.0",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0"
   }
 }

@@ -102,3 +102,14 @@ dist
 
 # TernJS port file
 .tern-port
+
+# API rate limit tracking file
+.api_rate_limit.json
+
+# Self-referencing symlink
+/MMM-YandexWeather
+
+# Screenshots
+*.png
+# Unused weather provider file (kept for reference)
+yandexweatherprovider.js

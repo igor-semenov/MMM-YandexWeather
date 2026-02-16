@@ -1,0 +1,153 @@
+/**
+ * Custom CSS for MMM-YandexWeather
+ */
+
+.yandexweather {
+	text-align: left;
+}
+
+/* Current Weather Section */
+.yandexweather .current-weather {
+	margin-bottom: 20px;
+}
+
+.yandexweather .main-row {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	margin-bottom: 10px;
+}
+
+.yandexweather .main-row .wi {
+	font-size: 60px;
+	line-height: 60px;
+}
+
+.yandexweather .main-row .large {
+	font-size: 60px;
+	line-height: 60px;
+}
+
+/* Forecast Table */
+.yandexweather .forecast-table {
+	border-collapse: collapse;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.yandexweather .forecast-table td {
+	padding: 5px 10px;
+	text-align: left;
+}
+
+.yandexweather .forecast-table .day {
+	min-width: 50px;
+}
+
+.yandexweather .forecast-table .icon {
+	text-align: center;
+	padding: 5px;
+}
+
+.yandexweather .forecast-table .icon .wi {
+	font-size: 25px;
+}
+
+.yandexweather .forecast-table .max-temp {
+	text-align: right;
+	font-weight: bold;
+}
+
+.yandexweather .forecast-table .min-temp {
+	text-align: right;
+}
+
+/* Hourly Forecast Table */
+.yandexweather .hourly-table {
+	border-collapse: collapse;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.yandexweather .hourly-table td {
+	padding: 5px 10px;
+	text-align: left;
+}
+
+.yandexweather .hourly-table .time {
+	min-width: 60px;
+}
+
+.yandexweather .hourly-table .icon {
+	text-align: center;
+	padding: 5px;
+}
+
+.yandexweather .hourly-table .icon .wi {
+	font-size: 20px;
+}
+
+.yandexweather .hourly-table .temp {
+	text-align: right;
+}
+
+/* Colored Icons */
+.yandexweather .wi.colored {
+	background: linear-gradient(to bottom, #91C0F8, #5A9FD4);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.yandexweather .wi.colored.wi-day-sunny,
+.yandexweather .wi.colored.wi-day-cloudy {
+	background: linear-gradient(to bottom, #FDB813, #FABE28);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.yandexweather .wi.colored.wi-rain,
+.yandexweather .wi.colored.wi-showers-day {
+	background: linear-gradient(to bottom, #91C0F8, #5A9FD4);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.yandexweather .wi.colored.wi-snow {
+	background: linear-gradient(to bottom, #FFFFFF, #E0E0E0);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.yandexweather .wi.colored.wi-thunderstorm {
+	background: linear-gradient(to bottom, #FFD700, #FFA500);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.yandexweather .wi.colored.wi-night-clear,
+.yandexweather .wi.colored.wi-night-partly-cloudy {
+	background: linear-gradient(to bottom, #C5CAE9, #7986CB);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+/* Size Classes */
+.yandexweather.xsmall {
+	font-size: 12px;
+}
+
+.yandexweather.small {
+	font-size: 16px;
+}
+
+.yandexweather.medium {
+	font-size: 20px;
+}
+
+.yandexweather.large {
+	font-size: 24px;
+}
+
+.yandexweather.xlarge {
+	font-size: 28px;
+}
