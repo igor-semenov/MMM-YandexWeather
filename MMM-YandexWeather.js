@@ -26,9 +26,6 @@ Module.register('MMM-YandexWeather', {
     // Animation speed for DOM updates
     animationSpeed: 1000,
 
-    // Units: "metric" or "imperial"
-    units: 'metric',
-
     // Language for labels
     lang: 'ru',
 
@@ -61,12 +58,6 @@ Module.register('MMM-YandexWeather', {
 
     // Round temperature values
     roundTemp: true,
-
-    // Decimal symbol
-    decimalSymbol: '.',
-
-    // Degree label (° by default)
-    degreeLabel: true,
 
     // Show description
     showDescription: true,

@@ -2,15 +2,19 @@
 
 A [MagicMirror²](https://github.com/MagicMirrorOrg/MagicMirror) module for displaying weather information from [Yandex Weather API v3](https://yandex.ru/dev/weather/).
 
+[![PR Checks](https://github.com/isemenov/MMM-YandexWeather/actions/workflows/pr-checks.yml/badge.svg)](https://github.com/isemenov/MMM-YandexWeather/actions/workflows/pr-checks.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
+
 ## Features
 
-- 🌡️ **Current weather** with temperature, humidity, wind, and weather conditions
-- 📅 **Daily forecast** for up to 10 days
-- ⏰ **Hourly forecast** for detailed predictions
-- 🎨 **Customizable display** with multiple configuration options
-- 🌍 **Multi-language support** (Russian and English)
-- 🎨 **Optional colored weather icons**
-- 📊 **"Feels like" temperature**
+- 🌡️ **Current weather** — temperature, "feels like", wind speed/direction
+- 📅 **Daily forecast** — up to N days with min/max temperatures and icons
+- ⏰ **Hourly forecast** — configurable number of hours (disabled by default)
+- 🎨 **Customizable display** — colored icons, fade effects, table size
+- 🌍 **Multi-language** — Russian and English
+- 🔒 **Rate limit protection** — built-in 50 req/day counter for free tier
+
+> **Note:** Humidity is not available in the Yandex Weather free tier and is not displayed.
 
 ## Screenshot
 
@@ -19,43 +23,35 @@ A [MagicMirror²](https://github.com/MagicMirrorOrg/MagicMirror) module for disp
 ## Prerequisites
 
 - MagicMirror² version 2.1.0 or higher
-- **Yandex Weather API key** (required)
+- **Yandex Weather API key** (free tier supports up to 50 requests/day)
 
 ### Getting a Yandex Weather API Key
 
 1. Go to [Yandex Weather API Console](https://yandex.ru/dev/weather/)
 2. Sign in with your Yandex account (or create one)
-3. Subscribe to the API service
-4. Choose a tariff plan (there's a free "Test" plan available)
-5. Generate an API key
-6. Copy the key for use in the module configuration
+3. Subscribe to the API service and choose a plan (free "Test" plan is available)
+4. Generate and copy your API key
 
 ## Installation
-
-### Install
-
-In your terminal, navigate to your MagicMirror's modules directory and clone this repository:
 
 ```bash
 cd ~/MagicMirror/modules
 git clone https://github.com/isemenov/MMM-YandexWeather
 cd MMM-YandexWeather
-npm install
+npm install --production
 ```
 
 ### Update
 
-Navigate to the module directory and pull the latest changes:
-
 ```bash
 cd ~/MagicMirror/modules/MMM-YandexWeather
 git pull
-npm install
+npm install --production
 ```
 
 ## Configuration
 
-To use this module, add the following configuration block to the `modules` array in the `config/config.js` file:
+Add to the `modules` array in `config/config.js`:
 
 ### Minimal Configuration
 
@@ -65,8 +61,8 @@ To use this module, add the following configuration block to the `modules` array
     position: 'top_right',
     config: {
         apiKey: 'YOUR_YANDEX_WEATHER_API_KEY',
-        lat: 55.75396,  // Your location latitude
-        lon: 37.620393  // Your location longitude
+        lat: 55.75396,    // Your location latitude
+        lon: 37.620393    // Your location longitude
     }
 }
 ```
@@ -82,30 +78,29 @@ To use this module, add the following configuration block to the `modules` array
         apiKey: 'YOUR_YANDEX_WEATHER_API_KEY',
 
         // Location
-        lat: 55.75396,              // Latitude (Moscow by default)
-        lon: 37.620393,             // Longitude (Moscow by default)
+        lat: 55.75396,                    // Latitude (Moscow by default)
+        lon: 37.620393,                   // Longitude (Moscow by default)
 
-        // Update and Display
-        updateInterval: 600000,     // Update interval in ms (10 minutes)
-        animationSpeed: 1000,       // Animation speed in ms
-        lang: 'ru',                 // Language: 'ru' or 'en'
+        // Update interval — keep at 3600000 (60 min) for free tier (50 req/day)
+        updateInterval: 3600000,          // 60 minutes
+        animationSpeed: 1000,             // Animation speed in ms
+        lang: 'ru',                       // Language: 'ru' or 'en'
 
-        // Forecast Options
-        showForecast: true,         // Show daily forecast
-        maxNumberOfDays: 7,         // Max days to show (1-10)
-        showHourlyForecast: false,  // Show hourly forecast
-        maxHourlyForecastEntries: 12, // Max hours to show
+        // Forecast
+        showForecast: true,               // Show daily forecast
+        maxNumberOfDays: 7,               // Number of forecast days
+        showHourlyForecast: false,        // Show hourly forecast
+        maxHourlyForecastEntries: 12,     // Number of hourly entries
 
-        // Display Options
-        showFeelsLike: true,        // Show "feels like" temperature
-        showHumidity: true,         // Show humidity
-        showWind: true,             // Show wind information
-        showDescription: true,      // Show weather description
-        roundTemp: true,            // Round temperature values
-        colored: false,             // Use colored weather icons
-        fade: true,                 // Fade forecast items
-        fadePoint: 0.25,            // Where to start fading (0-1)
-        tableClass: 'small'         // Table size: xsmall, small, medium, large, xlarge
+        // Display
+        showFeelsLike: true,              // Show "feels like" temperature
+        showWind: true,                   // Show wind speed and direction
+        showDescription: true,            // Show weather condition text
+        roundTemp: true,                  // Round temperatures to integers
+        colored: false,                   // Colored weather icons
+        fade: true,                       // Fade out forecast items
+        fadePoint: 0.25,                  // Where fading starts (0–1)
+        tableClass: 'small'               // Icon/text size: xsmall, small, medium, large, xlarge
     }
 }
 ```
@@ -114,84 +109,109 @@ To use this module, add the following configuration block to the `modules` array
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `apiKey` | `string` | **Required** | Your Yandex Weather API key |
-| `lat` | `number` | `55.75396` | Latitude of your location |
-| `lon` | `number` | `37.620393` | Longitude of your location |
-| `updateInterval` | `number` | `600000` | Update interval in milliseconds (default: 10 minutes) |
-| `animationSpeed` | `number` | `1000` | Animation speed for DOM updates in milliseconds |
-| `lang` | `string` | `'ru'` | Language for labels: `'ru'` or `'en'` |
+| `apiKey` | `string` | **Required** | Yandex Weather API key |
+| `lat` | `number` | `55.75396` | Location latitude |
+| `lon` | `number` | `37.620393` | Location longitude |
+| `updateInterval` | `number` | `3600000` | Update interval in ms (60 minutes — see [Rate Limits](#api-rate-limits)) |
+| `animationSpeed` | `number` | `1000` | DOM update animation speed in ms |
+| `lang` | `string` | `'ru'` | Display language: `'ru'` or `'en'` |
 | `showForecast` | `boolean` | `true` | Show daily forecast section |
-| `maxNumberOfDays` | `number` | `7` | Maximum number of forecast days to display (1-10) |
+| `maxNumberOfDays` | `number` | `7` | Number of forecast days to display |
 | `showHourlyForecast` | `boolean` | `false` | Show hourly forecast section |
-| `maxHourlyForecastEntries` | `number` | `12` | Maximum number of hourly entries to display |
+| `maxHourlyForecastEntries` | `number` | `12` | Number of hourly entries to display |
 | `showFeelsLike` | `boolean` | `true` | Show "feels like" temperature |
-| `showHumidity` | `boolean` | `true` | Show humidity information |
-| `showWind` | `boolean` | `true` | Show wind information |
+| `showWind` | `boolean` | `true` | Show wind speed and direction |
 | `showDescription` | `boolean` | `true` | Show weather condition description |
-| `roundTemp` | `boolean` | `true` | Round temperature values to integers |
-| `colored` | `boolean` | `false` | Use colored weather icons |
-| `fade` | `boolean` | `true` | Fade forecast items |
-| `fadePoint` | `number` | `0.25` | Point where fading begins (0-1) |
-| `tableClass` | `string` | `'small'` | Table size class: `'xsmall'`, `'small'`, `'medium'`, `'large'`, `'xlarge'` |
-
-## Finding Your Location Coordinates
-
-To find the latitude and longitude for your location:
-
-1. Go to [Google Maps](https://maps.google.com)
-2. Right-click on your desired location
-3. Click on the coordinates to copy them
-4. Use the first number as `lat` and the second as `lon`
-
-Or use online tools like:
-- [LatLong.net](https://www.latlong.net/)
-- [GPS Coordinates](https://gps-coordinates.org/)
+| `roundTemp` | `boolean` | `true` | Round temperatures to integers |
+| `colored` | `boolean` | `false` | Colored weather icons |
+| `fade` | `boolean` | `true` | Fade out forecast/hourly items |
+| `fadePoint` | `number` | `0.25` | Point where fading begins (0–1) |
+| `tableClass` | `string` | `'small'` | Size class: `xsmall`, `small`, `medium`, `large`, `xlarge` |
 
 ## API Rate Limits
 
-Yandex Weather API has usage limits depending on your tariff plan:
-- **Test plan**: Limited number of requests per day (free)
-- **Paid plans**: Higher limits based on subscription
+The Yandex Weather free tier allows **50 requests per day**. The module enforces this limit automatically:
 
-Recommended `updateInterval`:
-- For test plan: 600000 ms (10 minutes) or higher
-- For paid plans: Can be lower based on your needs
+- **Daily limit:** 50 requests (2 requests per update: current + forecast)
+- **Default interval:** 60 minutes → **48 requests/day** ✅
+- **Rate counter:** stored in `.api_rate_limit.json`, resets at midnight
+- **On limit reached:** module shows an error until midnight
+
+> ⚠️ If you enable hourly forecast (`showHourlyForecast: true`), each update uses **3 requests**. In that case set `updateInterval` to at least `5400000` (90 minutes) to stay within the limit.
+
+### Requests per day by interval
+
+| Interval | ms | Requests/day (forecast only) | Requests/day (+ hourly) |
+|----------|----|------------------------------|--------------------------|
+| 60 min | `3600000` | 48 ✅ | 72 ❌ |
+| 90 min | `5400000` | 32 ✅ | 48 ✅ |
+| 120 min | `7200000` | 24 ✅ | 36 ✅ |
+
+## Finding Your Coordinates
+
+1. Open [Google Maps](https://maps.google.com), right-click your location → copy coordinates
+2. Or use [latlong.net](https://www.latlong.net/)
+
+First number = `lat`, second = `lon`.
 
 ## Troubleshooting
 
-### Module shows "API key is missing"
-- Make sure you've set the `apiKey` in your configuration
-- Verify the API key is correct and active
+### "API key is missing"
+- Check that `apiKey` is set in your config
+- Verify the key is active in Yandex API Console
 
-### Module shows "Error" or no data
-- Check your API key is valid
-- Verify your internet connection
-- Check the browser console (F12) for error messages
-- Ensure you haven't exceeded your API rate limit
-- Verify the `lat` and `lon` coordinates are correct
+### "Daily API limit reached"
+- The free tier limit of 50 requests/day has been exhausted
+- Module will resume automatically at midnight
+- Increase `updateInterval` to prevent this in future
 
-### Weather data is not updating
-- Check your `updateInterval` setting
-- Verify you haven't exceeded API rate limits
-- Check the MagicMirror logs for errors
+### Error or no data shown
+- Verify API key and internet connection
+- Check browser console (F12) for errors
+- Check MagicMirror logs for backend errors
 
-### Icons not displaying correctly
-- Ensure the Weather Icons font is loaded by MagicMirror
-- Check that `weather-icons.css` is available in your MagicMirror installation
+### Icons show N/A
+- This was a known issue with condition names — fixed in v1.0.0
+- Ensure you're on the latest version (`git pull`)
 
-## Branding Requirements
+### Weather data not updating
+- Check `updateInterval` setting
+- Verify the rate limit hasn't been reached (check `.api_rate_limit.json`)
 
-According to Yandex Weather API terms of service:
-- If weather data will be publicly accessible, you must comply with Yandex Weather branding guidelines
-- This may include displaying a "Powered by Yandex.Weather" notice or logo
-- Check the [official documentation](https://yandex.ru/dev/weather/) for current requirements
+## Development
 
-## Developer Commands
+### Quality Checks
 
-- `npm install` - Install dependencies
-- `npm run lint` - Run linting checks
-- `npm run lint:fix` - Fix linting issues
-- `npm test` - Run tests
+```bash
+./check.sh           # Run all checks
+./check.sh --fix     # Run checks and auto-fix issues
+./check.sh --help    # Show usage
+```
+
+The script performs: linting, security audit, outdated dependencies, JSON validation, file checks, code issues detection, and git status.
+
+### Available npm Scripts
+
+```bash
+npm run lint          # ESLint check
+npm run lint:fix      # Auto-fix ESLint issues
+npm run check         # Run all quality checks
+npm run audit         # Security audit only
+```
+
+### CI/CD
+
+GitHub Actions workflows run automatically:
+
+- **On every PR** — linting, audit, structure check across Node.js 18/20/22
+- **On version tag** (`v*.*.*`) — quality checks + GitHub Release with archive
+- **Weekly (Monday)** — dependency check; creates issue if vulnerabilities found
+
+See [`.github/workflows/`](.github/workflows/README.md) for details.
+
+## Branding
+
+Per Yandex Weather API terms: if weather data is publicly displayed, you may be required to show a "Powered by Yandex.Weather" notice. Check the [official documentation](https://yandex.ru/dev/weather/) for current requirements.
 
 ## Credits
 
@@ -201,73 +221,23 @@ According to Yandex Weather API terms of service:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+MIT — see [LICENSE.md](LICENSE.md).
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+3. Run `./check.sh` to ensure code quality
+4. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+5. Push to the branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request — CI checks will run automatically
 
 ## Support
 
-If you encounter any issues or have questions:
-- Check the [Troubleshooting](#troubleshooting) section
-- Open an issue on [GitHub](https://github.com/isemenov/MMM-YandexWeather/issues)
-- Check the [MagicMirror Forum](https://forum.magicmirror.builders/)
-
-## Acknowledgments
-
-- Thanks to the MagicMirror² community
-- Thanks to Yandex for providing the Weather API
-
-## Development
-
-### Quality Checks
-
-Run comprehensive quality checks before committing:
-
-```bash
-./check.sh           # Check only
-./check.sh --fix     # Check and auto-fix issues
-./check.sh --help    # Show usage
-```
-
-The check script performs:
-- ✅ **Linting** - ESLint code quality checks
-- ✅ **Security Audit** - npm audit for vulnerabilities  
-- ✅ **Dependencies** - Check for outdated packages
-- ✅ **JSON Validation** - Verify all JSON files
-- ✅ **File Checks** - Ensure required files exist
-- ✅ **Code Issues** - Detect TODO/FIXME, hardcoded keys, etc.
-- ✅ **Git Status** - Show uncommitted changes
-
-### Available Scripts
-
-```bash
-npm run lint          # Run ESLint
-npm run lint:fix      # Auto-fix ESLint issues
-npm run check         # Run all quality checks
-npm run audit         # Security audit only
-```
-
-### Rate Limiting
-
-The module enforces Yandex Weather API free tier limits:
-- **Maximum:** 50 requests per day
-- **Tracking:** Stored in `.api_rate_limit.json` (auto-created)
-- **Reset:** Automatically at midnight
-- **Current usage:** Logged with each request
-
-Configure update interval to stay within limits:
-```javascript
-updateInterval: 60 * 60 * 1000  // 60 minutes = ~48 requests/day
-```
+- [Troubleshooting](#troubleshooting) section above
+- [GitHub Issues](https://github.com/isemenov/MMM-YandexWeather/issues)
+- [MagicMirror Forum](https://forum.magicmirror.builders/)
