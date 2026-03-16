@@ -20,8 +20,8 @@ Module.register('MMM-YandexWeather', {
     lat: 55.75396, // Moscow latitude
     lon: 37.620393, // Moscow longitude
 
-    // Update interval in milliseconds (default: 60 minutes to stay within 50 requests/day limit)
-    updateInterval: 60 * 60 * 1000,
+    // Update interval in milliseconds (default: 120 minutes = 24 requests/day for free tier)
+    updateInterval: 120 * 60 * 1000,
 
     // Animation speed for DOM updates
     animationSpeed: 1000,
