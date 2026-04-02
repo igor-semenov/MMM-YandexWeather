@@ -193,12 +193,14 @@ Module.register('MMM-YandexWeather', {
               }
             }
           }
-          hours(limit: ${this.config.maxHourlyForecastEntries}) {
-            time
-            temperature
-            condition
-            icon(format: CODE)
-            feelsLike
+          hours(first: ${this.config.maxHourlyForecastEntries}) {
+            nodes {
+              time
+              temperature
+              condition
+              icon(format: CODE)
+              feelsLike
+            }
           }
         }
       }
@@ -289,7 +291,7 @@ Module.register('MMM-YandexWeather', {
     }
 
     // Create hourly forecast section
-    if (this.config.showHourlyForecast && this.hourlyData && this.hourlyData.hours) {
+    if (this.config.showHourlyForecast && this.hourlyData && this.hourlyData.hours && this.hourlyData.hours.nodes) {
       wrapper.appendChild(this.renderHourlyForecast())
     }
 
@@ -434,8 +436,8 @@ Module.register('MMM-YandexWeather', {
     const wrapper = document.createElement('table')
     wrapper.className = `hourly-table ${this.config.tableClass}`
 
-    for (let i = 0; i < this.hourlyData.hours.length; i++) {
-      const hour = this.hourlyData.hours[i]
+    for (let i = 0; i < this.hourlyData.hours.nodes.length; i++) {
+      const hour = this.hourlyData.hours.nodes[i]
 
       const row = document.createElement('tr')
 
