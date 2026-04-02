@@ -148,7 +148,8 @@ Module.register('MMM-YandexWeather', {
     }
 
     this.fetchWeather()
-    this.scheduleUpdate()
+    // Next update is scheduled in socketNotificationReceived once the
+    // cache/fresh decision is known, so the remaining interval is correct.
   },
 
   /**
@@ -158,6 +159,9 @@ Module.register('MMM-YandexWeather', {
     this.sendSocketNotification('FETCH_YANDEX_WEATHER', {
       apiKey: this.config.apiKey,
       query: this.getWeatherQuery(),
+      updateInterval: this.config.updateInterval,
+      lat: this.config.lat,
+      lon: this.config.lon,
     })
   },
 
@@ -207,8 +211,16 @@ Module.register('MMM-YandexWeather', {
   socketNotificationReceived(notification, payload) {
     if (notification === 'YANDEX_WEATHER_DATA') {
       this.processWeatherData(payload)
+      // Schedule next update at remaining time if data came from cache,
+      // or at a full interval if it was a live fetch.
+      // Note: if cacheAge is negative (clock skew), Math.max clamps to 0.
+      const delay = payload.fromCache
+        ? Math.max(0, this.config.updateInterval - payload.cacheAge)
+        : this.config.updateInterval
+      this.scheduleUpdate(delay)
     } else if (notification === 'YANDEX_WEATHER_ERROR') {
       this.processError(payload)
+      this.scheduleUpdate()
     }
   },
 

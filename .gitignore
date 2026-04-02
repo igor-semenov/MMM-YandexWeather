@@ -106,6 +106,9 @@ dist
 # API rate limit tracking file
 .api_rate_limit.json
 
+# Weather response cache file
+.weather_cache.json
+
 # Self-referencing symlink
 /MMM-YandexWeather
 
