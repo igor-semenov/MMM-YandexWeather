@@ -12,7 +12,7 @@ A [MagicMirror²](https://github.com/MagicMirrorOrg/MagicMirror) module for disp
 - ⏰ **Hourly forecast** — configurable number of hours (disabled by default)
 - 🎨 **Customizable display** — colored icons, fade effects, table size
 - 🌍 **Multi-language** — Russian and English
-- 🔒 **Rate limit protection** — built-in 50 req/day counter for free tier
+- 🔒 **Rate limit protection** — built-in 30 req/day counter for free tier
 
 > **Note:** Humidity is not available in the Yandex Weather free tier and is not displayed.
 
@@ -23,7 +23,7 @@ A [MagicMirror²](https://github.com/MagicMirrorOrg/MagicMirror) module for disp
 ## Prerequisites
 
 - MagicMirror² version 2.1.0 or higher
-- **Yandex Weather API key** (free tier supports up to 50 requests/day)
+- **Yandex Weather API key** (free tier supports up to 30 requests/day)
 
 ### Getting a Yandex Weather API Key
 
@@ -130,9 +130,9 @@ Add to the `modules` array in `config/config.js`:
 
 ## API Rate Limits
 
-The Yandex Weather free tier allows **50 requests per day**. The module enforces this limit automatically:
+The Yandex Weather free tier allows **30 requests per day**. The module enforces this limit automatically:
 
-- **Daily limit:** 50 requests (1 request per update — all data in one query)
+- **Daily limit:** 30 requests (1 request per update — all data in one query)
 - **Default interval:** 60 minutes → **24 requests/day** ✅
 - **Rate counter:** stored in `.api_rate_limit.json`, resets at midnight
 - **On limit reached:** module shows an error until midnight
@@ -143,7 +143,7 @@ All data (current weather, daily forecast, hourly forecast) is fetched in a sing
 
 | Interval | ms | Requests/day |
 |----------|----|--------------|
-| 30 min | `1800000` | 48 ✅ |
+| 48 min | `2880000` | 30 ✅ minimum |
 | 60 min | `3600000` | 24 ✅ ← default |
 | 120 min | `7200000` | 12 ✅ |
 
@@ -161,7 +161,7 @@ First number = `lat`, second = `lon`.
 - Verify the key is active in Yandex API Console
 
 ### "Daily API limit reached"
-- The free tier limit of 50 requests/day has been exhausted
+- The free tier limit of 30 requests/day has been exhausted
 - Module will resume automatically at midnight
 - Increase `updateInterval` to prevent this in future
 

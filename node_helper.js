@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 // Daily API request limit for free tier
-const DAILY_REQUEST_LIMIT = 50
+const DAILY_REQUEST_LIMIT = 30
 
 /**
  * Node Helper for MMM-YandexWeather
