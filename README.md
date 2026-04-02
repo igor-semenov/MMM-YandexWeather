@@ -81,8 +81,8 @@ Add to the `modules` array in `config/config.js`:
         lat: 55.75396,                    // Latitude (Moscow by default)
         lon: 37.620393,                   // Longitude (Moscow by default)
 
-        // Update interval — default 7200000 (120 min) = 24 req/day for free tier
-        updateInterval: 7200000,          // 120 minutes
+        // Update interval — default 3600000 (60 min) = 24 req/day for free tier
+        updateInterval: 3600000,          // 60 minutes
         animationSpeed: 1000,             // Animation speed in ms
         lang: 'ru',                       // Language: 'ru' or 'en'
 
@@ -112,7 +112,7 @@ Add to the `modules` array in `config/config.js`:
 | `apiKey` | `string` | **Required** | Yandex Weather API key |
 | `lat` | `number` | `55.75396` | Location latitude |
 | `lon` | `number` | `37.620393` | Location longitude |
-| `updateInterval` | `number` | `7200000` | Update interval in ms (120 minutes — see [Rate Limits](#api-rate-limits)) |
+| `updateInterval` | `number` | `3600000` | Update interval in ms (60 minutes — see [Rate Limits](#api-rate-limits)) |
 | `animationSpeed` | `number` | `1000` | DOM update animation speed in ms |
 | `lang` | `string` | `'ru'` | Display language: `'ru'` or `'en'` |
 | `showForecast` | `boolean` | `true` | Show daily forecast section |
@@ -132,20 +132,20 @@ Add to the `modules` array in `config/config.js`:
 
 The Yandex Weather free tier allows **50 requests per day**. The module enforces this limit automatically:
 
-- **Daily limit:** 50 requests (2 requests per update: current + forecast)
-- **Default interval:** 120 minutes → **24 requests/day** ✅
+- **Daily limit:** 50 requests (1 request per update — all data in one query)
+- **Default interval:** 60 minutes → **24 requests/day** ✅
 - **Rate counter:** stored in `.api_rate_limit.json`, resets at midnight
 - **On limit reached:** module shows an error until midnight
 
-> ⚠️ If you enable hourly forecast (`showHourlyForecast: true`), each update uses **3 requests**. In that case set `updateInterval` to at least `5400000` (90 minutes) to stay within the limit.
+All data (current weather, daily forecast, hourly forecast) is fetched in a single GraphQL request regardless of which sections are displayed.
 
 ### Requests per day by interval
 
-| Interval | ms | Requests/day (forecast only) | Requests/day (+ hourly) |
-|----------|----|------------------------------|--------------------------|
-| 60 min | `3600000` | 48 ✅ | 72 ❌ |
-| 90 min | `5400000` | 32 ✅ | 48 ✅ |
-| 120 min | `7200000` | 24 ✅ | 36 ✅ ← default |
+| Interval | ms | Requests/day |
+|----------|----|--------------|
+| 30 min | `1800000` | 48 ✅ |
+| 60 min | `3600000` | 24 ✅ ← default |
+| 120 min | `7200000` | 12 ✅ |
 
 ## Finding Your Coordinates
 

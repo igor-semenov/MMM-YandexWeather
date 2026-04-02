@@ -20,8 +20,8 @@ Module.register('MMM-YandexWeather', {
     lat: 55.75396, // Moscow latitude
     lon: 37.620393, // Moscow longitude
 
-    // Update interval in milliseconds (default: 120 minutes = 24 requests/day for free tier)
-    updateInterval: 120 * 60 * 1000,
+    // Update interval in milliseconds (default: 60 minutes = 24 requests/day for free tier)
+    updateInterval: 60 * 60 * 1000,
 
     // Animation speed for DOM updates
     animationSpeed: 1000,
@@ -147,92 +147,39 @@ Module.register('MMM-YandexWeather', {
       return
     }
 
-    // Fetch current weather
-    this.fetchCurrentWeather()
-
-    // Fetch forecast if enabled
-    if (this.config.showForecast) {
-      this.fetchWeatherForecast()
-    }
-
-    // Fetch hourly if enabled
-    if (this.config.showHourlyForecast) {
-      this.fetchWeatherHourly()
-    }
-
-    // Schedule next update
+    this.fetchWeather()
     this.scheduleUpdate()
   },
 
   /**
-   * Fetch current weather
+   * Fetch all weather data in a single GraphQL request
    */
-  fetchCurrentWeather() {
-    const query = this.getCurrentWeatherQuery()
+  fetchWeather() {
     this.sendSocketNotification('FETCH_YANDEX_WEATHER', {
       apiKey: this.config.apiKey,
-      query: query,
-      type: 'current'
+      query: this.getWeatherQuery(),
     })
   },
 
   /**
-   * Fetch weather forecast
+   * Build a single GraphQL query for all weather data
    */
-  fetchWeatherForecast() {
-    const query = this.getForecastQuery()
-    this.sendSocketNotification('FETCH_YANDEX_WEATHER', {
-      apiKey: this.config.apiKey,
-      query: query,
-      type: 'forecast'
-    })
-  },
-
-  /**
-   * Fetch hourly forecast
-   */
-  fetchWeatherHourly() {
-    const query = this.getHourlyQuery()
-    this.sendSocketNotification('FETCH_YANDEX_WEATHER', {
-      apiKey: this.config.apiKey,
-      query: query,
-      type: 'hourly'
-    })
-  },
-
-  /**
-   * Get current weather GraphQL query
-   */
-  getCurrentWeatherQuery() {
+  getWeatherQuery() {
     return `{
       weatherByPoint(request: { lat: ${this.config.lat}, lon: ${this.config.lon} }) {
         now {
           temperature
+          feelsLike
           windSpeed
           windDirection
           condition
           icon(format: CODE)
-          feelsLike
         }
-        forecast {
-          days(limit: 1) {
-            sunriseTime
-            sunsetTime
-          }
-        }
-      }
-    }`
-  },
-
-  /**
-   * Get forecast GraphQL query
-   */
-  getForecastQuery() {
-    return `{
-      weatherByPoint(request: { lat: ${this.config.lat}, lon: ${this.config.lon} }) {
         forecast {
           days(limit: ${this.config.maxNumberOfDays}) {
             time
+            sunriseTime
+            sunsetTime
             parts {
               day {
                 minTemperature
@@ -242,18 +189,6 @@ Module.register('MMM-YandexWeather', {
               }
             }
           }
-        }
-      }
-    }`
-  },
-
-  /**
-   * Get hourly forecast GraphQL query
-   */
-  getHourlyQuery() {
-    return `{
-      weatherByPoint(request: { lat: ${this.config.lat}, lon: ${this.config.lon} }) {
-        forecast {
           hours(limit: ${this.config.maxHourlyForecastEntries}) {
             time
             temperature
@@ -281,22 +216,18 @@ Module.register('MMM-YandexWeather', {
    * Process weather data from API
    */
   processWeatherData(payload) {
-    const { data, type } = payload
+    const { data } = payload
 
     if (!data || !data.weatherByPoint) {
       Log.error('YandexWeather: Invalid data structure')
       return
     }
 
-    if (type === 'current') {
-      this.weatherData = data.weatherByPoint
-      this.loaded = true
-      this.error = null
-    } else if (type === 'forecast') {
-      this.forecastData = data.weatherByPoint.forecast
-    } else if (type === 'hourly') {
-      this.hourlyData = data.weatherByPoint.forecast
-    }
+    this.weatherData = data.weatherByPoint
+    this.forecastData = data.weatherByPoint.forecast
+    this.hourlyData = data.weatherByPoint.forecast
+    this.loaded = true
+    this.error = null
 
     this.updateDom(this.config.animationSpeed)
   },

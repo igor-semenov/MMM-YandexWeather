@@ -37,16 +37,15 @@ module.exports = NodeHelper.create({
   /**
    * Fetch weather data from Yandex Weather API
    *
-   * @param {object} config - Configuration object containing API key, coordinates, and query
+   * @param {object} config - Configuration object containing API key and query
    */
   async fetchYandexWeather(config) {
-    const { apiKey, query, type } = config
+    const { apiKey, query } = config
 
     if (!apiKey) {
       console.error('YandexWeather: API key is missing')
       this.sendSocketNotification('YANDEX_WEATHER_ERROR', {
         error: 'API key is required',
-        type,
       })
       return
     }
@@ -57,20 +56,17 @@ module.exports = NodeHelper.create({
       if (response && response.data) {
         this.sendSocketNotification('YANDEX_WEATHER_DATA', {
           data: response.data,
-          type,
         })
       } else {
         console.error('YandexWeather: Invalid response from API')
         this.sendSocketNotification('YANDEX_WEATHER_ERROR', {
           error: 'Invalid response from API',
-          type,
         })
       }
     } catch (error) {
       console.error('YandexWeather: Error fetching weather data:', error.message)
       this.sendSocketNotification('YANDEX_WEATHER_ERROR', {
         error: error.message,
-        type,
       })
     }
   },
