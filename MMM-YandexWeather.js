@@ -66,7 +66,10 @@ Module.register('MMM-YandexWeather', {
     colored: false,
 
     // Table class (options: xsmall, small, medium, large, xlarge)
-    tableClass: 'small'
+    tableClass: 'small',
+
+    // Maximum width of the widget (e.g. "250px", "20em", null = no limit)
+    maxWidth: null
   },
 
   /**
@@ -269,6 +272,9 @@ Module.register('MMM-YandexWeather', {
   getDom() {
     const wrapper = document.createElement('div')
     wrapper.className = 'yandexweather'
+    if (this.config.maxWidth) {
+      wrapper.style.maxWidth = this.config.maxWidth
+    }
 
     // Show error if present
     if (this.error) {
