@@ -4,6 +4,15 @@
 
 .yandexweather {
 	text-align: left;
+	position: relative;
+}
+
+.yandexweather .last-updated {
+	position: absolute;
+	top: 0;
+	right: 0;
+	opacity: 0.6;
+	white-space: nowrap;
 }
 
 /* Current Weather Section */

@@ -1,5 +1,6 @@
 {
 	"LOADING": "Loading weather...",
+	"UPDATED": "Updated:",
 	"ERROR": "Error",
 	"API_KEY_MISSING": "API key is missing. Please configure your Yandex Weather API key.",
 	"FEELS_LIKE": "feels like",

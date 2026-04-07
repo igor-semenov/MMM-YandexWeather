@@ -93,6 +93,7 @@ Module.register('MMM-YandexWeather', {
     this.hourlyData = null
     this.loaded = false
     this.error = null
+    this.lastUpdated = null
 
     // Schedule first update
     this.scheduleUpdate(this.config.initialLoadDelay || 0)
@@ -244,6 +245,7 @@ Module.register('MMM-YandexWeather', {
     this.hourlyData = data.weatherByPoint.forecast
     this.loaded = true
     this.error = null
+    this.lastUpdated = new Date(Date.now() - (payload.cacheAge || 0))
 
     this.updateDom(this.config.animationSpeed)
   },
@@ -253,6 +255,10 @@ Module.register('MMM-YandexWeather', {
    */
   processError(payload) {
     Log.error('YandexWeather: Error -', payload.error)
+    if (this.loaded) {
+      // Keep showing existing data, don't replace with error screen
+      return
+    }
     this.error = payload.error
     this.updateDom(this.config.animationSpeed)
   },
@@ -280,6 +286,14 @@ Module.register('MMM-YandexWeather', {
     if (!this.config.apiKey) {
       wrapper.innerHTML = `<div class="dimmed light small">${this.translate('API_KEY_MISSING')}</div>`
       return wrapper
+    }
+
+    // Last updated timestamp (top-right corner)
+    if (this.lastUpdated) {
+      const updatedEl = document.createElement('div')
+      updatedEl.className = 'last-updated dimmed xsmall'
+      updatedEl.innerHTML = `${this.translate('UPDATED')} ${moment(this.lastUpdated).format('DD.MM HH:mm')}`
+      wrapper.appendChild(updatedEl)
     }
 
     // Create current weather section

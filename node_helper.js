@@ -133,15 +133,23 @@ module.exports = NodeHelper.create({
         })
       } else {
         console.error('YandexWeather: Invalid response from API')
-        this.sendSocketNotification('YANDEX_WEATHER_ERROR', {
-          error: 'Invalid response from API',
-        })
+        if (cache && cache.data) {
+          const cacheAge = Date.now() - cache.fetchedAt
+          console.log(`YandexWeather: Invalid response, serving stale cache (age: ${Math.round(cacheAge / 60000)} min)`)
+          this.sendSocketNotification('YANDEX_WEATHER_DATA', { data: cache.data, fromCache: true, cacheAge })
+        } else {
+          this.sendSocketNotification('YANDEX_WEATHER_ERROR', { error: 'Invalid response from API' })
+        }
       }
     } catch (error) {
       console.error('YandexWeather: Error fetching weather data:', error.message)
-      this.sendSocketNotification('YANDEX_WEATHER_ERROR', {
-        error: error.message,
-      })
+      if (cache && cache.data) {
+        const cacheAge = Date.now() - cache.fetchedAt
+        console.log(`YandexWeather: API error, serving stale cache (age: ${Math.round(cacheAge / 60000)} min)`)
+        this.sendSocketNotification('YANDEX_WEATHER_DATA', { data: cache.data, fromCache: true, cacheAge })
+      } else {
+        this.sendSocketNotification('YANDEX_WEATHER_ERROR', { error: error.message })
+      }
     }
   },
 

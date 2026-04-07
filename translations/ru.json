@@ -1,5 +1,6 @@
 {
 	"LOADING": "Загрузка погоды...",
+	"UPDATED": "Обновлено:",
 	"ERROR": "Ошибка",
 	"API_KEY_MISSING": "API ключ отсутствует. Пожалуйста, настройте ваш Yandex Weather API ключ.",
 	"FEELS_LIKE": "ощущается как",
