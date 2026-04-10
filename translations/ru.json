@@ -19,6 +19,7 @@
 	"CONDITION_HEAVY_RAIN": "Сильный дождь",
 	"CONDITION_CONTINUOUS_HEAVY_RAIN": "Длительный сильный дождь",
 	"CONDITION_SHOWERS": "Ливень",
+	"CONDITION_SLEET": "Ледяной дождь",
 	"CONDITION_WET_SNOW": "Дождь со снегом",
 	"CONDITION_LIGHT_SNOW": "Небольшой снег",
 	"CONDITION_SNOW": "Снег",

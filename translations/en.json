@@ -19,6 +19,7 @@
 	"CONDITION_HEAVY_RAIN": "Heavy Rain",
 	"CONDITION_CONTINUOUS_HEAVY_RAIN": "Continuous Heavy Rain",
 	"CONDITION_SHOWERS": "Showers",
+	"CONDITION_SLEET": "Sleet",
 	"CONDITION_WET_SNOW": "Wet Snow",
 	"CONDITION_LIGHT_SNOW": "Light Snow",
 	"CONDITION_SNOW": "Snow",

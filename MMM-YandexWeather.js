@@ -513,6 +513,7 @@ Module.register('MMM-YandexWeather', {
       'moderate-rain': 'rain',
       'heavy-rain': 'rain',
       'continuous-heavy-rain': 'rain',
+      'sleet': 'sleet',
       'showers': 'showers-day',
       'wet-snow': 'snow',
       'light-snow': 'snow',
