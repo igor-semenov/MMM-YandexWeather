@@ -151,8 +151,8 @@ if [ "$FIX_MODE" = true ]; then
     echo "$FIX_OUTPUT"
 
     # Run audit again to check remaining issues
-    AUDIT_OUTPUT=$(npm audit --audit-level=moderate 2>&1)
-    AUDIT_EXIT_CODE=$?
+    AUDIT_OUTPUT=$(npm audit --audit-level=moderate 2>&1) || AUDIT_EXIT_CODE=$?
+    AUDIT_EXIT_CODE=${AUDIT_EXIT_CODE:-0}
 
     if [ $AUDIT_EXIT_CODE -eq 0 ]; then
         print_success "All vulnerabilities fixed"
@@ -165,8 +165,8 @@ if [ "$FIX_MODE" = true ]; then
     fi
 else
     print_section "Running security audit"
-    AUDIT_OUTPUT=$(npm audit --audit-level=moderate 2>&1)
-    AUDIT_EXIT_CODE=$?
+    AUDIT_OUTPUT=$(npm audit --audit-level=moderate 2>&1) || AUDIT_EXIT_CODE=$?
+    AUDIT_EXIT_CODE=${AUDIT_EXIT_CODE:-0}
 
     if [ $AUDIT_EXIT_CODE -eq 0 ]; then
         print_success "No security vulnerabilities found"
